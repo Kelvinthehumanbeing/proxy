@@ -170,10 +170,17 @@ while True:
 
       # Get the response from the origin server
       # ~~~~ INSERT CODE ~~~~
+      originResponse = b""
+      while True:
+          data = originServerSocket.recv(BUFFER_SIZE)
+          if not data:
+              break
+          originResponse += data
       # ~~~~ END CODE INSERT ~~~~
 
       # Send the response to the client
       # ~~~~ INSERT CODE ~~~~
+      clientSocket.sendall(originResponse)
       # ~~~~ END CODE INSERT ~~~~
 
       # Create a new file in the cache for the requested file.
