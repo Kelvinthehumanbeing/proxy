@@ -191,6 +191,7 @@ while True:
               clientSocket.sendall(originResponse)
               clientSocket.shutdown(socket.SHUT_WR)
               originServerSocket.close()
+              clientSocket.close()
               continue
       # ~~~~ END CODE INSERT ~~~~
 
