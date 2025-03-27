@@ -111,6 +111,17 @@ while True:
 
     fileExists = os.path.isfile(cacheLocation)
     
+    # Check .meta file for max-age expiry
+    # ~~~~ INSERT CODE ~~~~
+    meta_path = cacheLocation + '.meta'
+    if os.path.exists(meta_path):
+        with open(meta_path, 'r') as metafile:
+            expire_time = float(metafile.read())
+            if time.time() > expire_time:
+                print('Cache expired. Will fetch from origin server.')
+                raise Exception("Cache expired")
+    # ~~~~ END CODE INSERT ~~~~
+
     # Check wether the file is currently in the cache
     cacheFile = open(cacheLocation, "rb")
     cacheData = cacheFile.read()
