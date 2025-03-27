@@ -4,6 +4,7 @@ import sys
 import os
 import argparse
 import re
+import time
 
 # 1MB buffer size
 BUFFER_SIZE = 1000000
@@ -211,6 +212,20 @@ while True:
       # ~~~~ INSERT CODE ~~~~
       cacheFile.write(originResponse)
       # ~~~~ END CODE INSERT ~~~~
+      
+      # Write cache-control max-age expiry time to .meta file after caching response
+      # ~~~~ INSERT CODE ~~~~
+      header, _, _ = originResponse.partition(b"\r\n\r\n")
+      header_text = header.decode(errors='ignore')
+      match = re.search(r'Cache-Control:.*?max-age=(\d+)', header_text, re.IGNORECASE)
+      if match:
+          max_age = int(match.group(1))
+          expire_time = time.time() + max_age
+          meta_path = cacheLocation + '.meta'
+          with open(meta_path, 'w') as metafile:
+              metafile.write(str(expire_time))
+      # ~~~~ END CODE INSERT ~~~~
+
       cacheFile.close()
       print ('cache file closed')
 
