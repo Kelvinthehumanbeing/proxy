@@ -179,6 +179,21 @@ while True:
           originResponse += data
       # ~~~~ END CODE INSERT ~~~~
 
+      #Redirect if the response is a 301 or 302
+      # ~~~~ INSERT CODE ~~~~
+      status_line = originResponse.split(b'\r\n', 1)[0].decode()
+      if '301' in status_line or '302' in status_line:
+          headers = originResponse.decode(errors='ignore')
+          match = re.search(r'Location:\s*(\S+)', headers)
+          if match:
+              new_url = match.group(1)
+              print("Redirecting to:", new_url)
+              clientSocket.sendall(originResponse)
+              clientSocket.shutdown(socket.SHUT_WR)
+              originServerSocket.close()
+              continue
+      # ~~~~ END CODE INSERT ~~~~
+
       # Send the response to the client
       # ~~~~ INSERT CODE ~~~~
       clientSocket.sendall(originResponse)
