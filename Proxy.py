@@ -162,7 +162,7 @@ while True:
       # originServerRequestHeader is the second line in the request
       # ~~~~ INSERT CODE ~~~~
       originServerRequest = "GET " + resource + " HTTP/1.1"
-      originServerRequestHeader = "Host: " + hostname
+      originServerRequestHeader = "Host: " + hostname + "\r\nConnection: close"
       # ~~~~ END CODE INSERT ~~~~
 
       # Construct the request to send to the origin server
